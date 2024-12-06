@@ -40,7 +40,7 @@ pub struct SetRootPathRequest {
     path: String,
 }
 
-#[get("/config/root")]
+#[get("/root")]
 pub async fn get_root_path(state: &State<AppState>) -> Json<ApiResponse> {
     let root_path = state.get_root_path();
     match root_path {
@@ -55,7 +55,7 @@ pub async fn get_root_path(state: &State<AppState>) -> Json<ApiResponse> {
     }
 }
 
-#[post("/config/root", format = "json", data = "<request>")]
+#[post("/root", format = "json", data = "<request>")]
 pub async fn set_root_path(request: Json<SetRootPathRequest>, state: &State<AppState>) -> Json<ApiResponse> {
     let path = PathBuf::from(&request.path);
     println!("Request path: {:?}", path);

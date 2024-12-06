@@ -11,11 +11,17 @@ use rocket::fs::NamedFile;
 use rocket::State;
 use rocket::http::ContentType;
 use rocket_multipart_form_data::{
-    MultipartFormData, MultipartFormDataError, MultipartFormDataField, MultipartFormDataOptions, Repetition
+    MultipartFormData, MultipartFormDataField, MultipartFormDataOptions, Repetition
 };
 use rocket::Data;
 use uuid::Uuid;
 use std::fs;
+use serde::Serialize;
+
+#[derive(Serialize)]
+struct FileList {
+    files: Vec<String>
+}
 
 #[get("/")]
 async fn index() -> Json<ApiResponse> {
@@ -33,26 +39,19 @@ async fn get_file(path: PathBuf, state: &State<AppState>) -> Option<NamedFile> {
 }
 
 #[post("/files/upload/<client_id>", data = "<data>")]
-async fn upload_files(content_type: &ContentType, data: Data<'_>, client_id: String, state: &State<AppState>) -> Json<ApiResponse> {
+async fn upload_files(content_type: &ContentType, data: Data<'_>, client_id: String, state: &State<AppState>) -> Json<FileList> {
     println!("Request path: /files/upload/{}", client_id);
     println!("Content type: {:?}", content_type);
-    // println!("Data length: {}", );
     let root_path = match state.get_root_path() {
         Some(path) => path,
-        None => return Json(ApiResponse {
-            status: "error".to_string(),
-            message: "Root path not configured".to_string(),
-        }),
+        None => return Json(FileList { files: vec![] }),
     };
 
     // Create client directory if it doesn't exist
     let client_dir = root_path.join(&client_id);
     if !client_dir.exists() {
-        if let Err(e) = fs::create_dir_all(&client_dir) {
-            return Json(ApiResponse {
-                status: "error".to_string(),
-                message: format!("Failed to create client directory: {}", e),
-            });
+        if let Err(_) = fs::create_dir_all(&client_dir) {
+            return Json(FileList { files: vec![] });
         }
     }
 
@@ -66,10 +65,7 @@ async fn upload_files(content_type: &ContentType, data: Data<'_>, client_id: Str
     // Process the multipart form data
     let multipart_form_data = match MultipartFormData::parse(content_type, data, options).await {
         Ok(multipart) => multipart,
-        Err(e) => return Json(ApiResponse {
-            status: "error".to_string(),
-            message: format!("Failed to parse multipart form data: {}", e),
-        }),
+        Err(_) => return Json(FileList { files: vec![] }),
     };
     
     let files = multipart_form_data.files.get("files");
@@ -83,20 +79,14 @@ async fn upload_files(content_type: &ContentType, data: Data<'_>, client_id: Str
             };
             
             let file_path = client_dir.join(&file_name);
-            if let Err(e) = fs::copy(&file.path, &file_path) {
-                return Json(ApiResponse {
-                    status: "error".to_string(),
-                    message: format!("Failed to save file {}: {}", file_name, e),
-                });
+            if let Err(_) = fs::copy(&file.path, &file_path) {
+                continue;
             }
             saved_files.push(file_name);
         }
     }
 
-    Json(ApiResponse {
-        status: "success".to_string(),
-        message: format!("Successfully uploaded {} files", saved_files.len()),
-    })
+    Json(FileList { files: saved_files })
 }
 
 #[launch]
