@@ -1,0 +1,79 @@
+import { describe, it, expect, vi } from 'vitest';
+import { render, fireEvent, screen } from '@testing-library/svelte';
+import UploadPage from './+page.svelte';
+
+describe('Upload Page', () => {
+    it('displays welcome message with client ID', () => {
+        const { getByText } = render(UploadPage, {
+            props: {
+                data: {
+                    page: {
+                        params: { client_id: 'test-client' }
+                    }
+                }
+            }
+        });
+        expect(getByText('Welcome, test-client!')).toBeTruthy();
+    });
+
+    it('shows file count correctly', async () => {
+        const { component } = render(UploadPage);
+        
+        // Initially should show 0 files
+        expect(screen.getByText('0')).toBeTruthy();
+        
+        // Simulate file drop
+        const files = [
+            new File(['test content'], 'test.pdf', { type: 'application/pdf' }),
+            new File(['another test'], 'test2.txt', { type: 'text/plain' })
+        ];
+        
+        await fireEvent(component, 'drop', {
+            detail: {
+                acceptedFiles: files,
+                fileRejections: []
+            }
+        });
+
+        // Should now show 2 files
+        expect(screen.getByText('2')).toBeTruthy();
+    });
+
+    it('displays file list when files are added', async () => {
+        const { component } = render(UploadPage);
+        
+        const files = [
+            new File(['test content'], 'test.pdf', { type: 'application/pdf' })
+        ];
+        
+        await fireEvent(component, 'drop', {
+            detail: {
+                acceptedFiles: files,
+                fileRejections: []
+            }
+        });
+
+        // Check if file name and size are displayed
+        expect(screen.getByText('test.pdf (0 KB)')).toBeTruthy();
+        expect(screen.getByText('Files to upload:')).toBeTruthy();
+    });
+
+    it('handles rejected files', async () => {
+        const { component } = render(UploadPage);
+        
+        const rejectedFile = {
+            file: new File(['test'], 'test.exe', { type: 'application/x-msdownload' }),
+            errors: [{ message: 'File type not allowed' }]
+        };
+        
+        await fireEvent(component, 'drop', {
+            detail: {
+                acceptedFiles: [],
+                fileRejections: [rejectedFile]
+            }
+        });
+
+        expect(screen.getByText('Rejected Files:')).toBeTruthy();
+        expect(screen.getByText('test.exe - File type not allowed')).toBeTruthy();
+    });
+});
