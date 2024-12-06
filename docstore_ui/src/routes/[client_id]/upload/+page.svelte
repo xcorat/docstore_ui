@@ -62,7 +62,6 @@
 <div class="container mx-auto flex flex-col items-center justify-start min-h-screen p-4">
     <h1 class="text-3xl font-bold mb-8">Welcome, {clientId}!</h1>
     
-    {files.accepted.length}
     <div class="w-full max-w-xl">
         <div class="upload-container">
             <Dropzone
