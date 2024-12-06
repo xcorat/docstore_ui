@@ -36,7 +36,7 @@ mod tests {
     #[test]
     fn test_get_root_path() {
         let (client, _temp_dir) = setup_client();
-        let response = client.get("/config/root").dispatch();
+        let response = client.get("/config/path").dispatch();
         assert_eq!(response.status(), Status::Ok);
         
         let response_json: serde_json::Value = serde_json::from_str(
@@ -56,7 +56,7 @@ mod tests {
         // Ensure the directory exists
         std::fs::create_dir_all(&test_path).expect("Failed to create test directory");
         
-        let response = client.post("/config/root")
+        let response = client.post("/config/path")
             .header(ContentType::JSON)
             .json(&serde_json::json!({
                 "path": test_path
@@ -73,7 +73,7 @@ mod tests {
         assert!(response_json["message"].as_str().unwrap().contains(&test_path));
         
         // Verify the path was actually set by making a GET request
-        let get_response = client.get("/config/root").dispatch();
+        let get_response = client.get("/config/path").dispatch();
         assert_eq!(get_response.status(), Status::Ok);
         
         let get_json: serde_json::Value = serde_json::from_str(
@@ -87,7 +87,7 @@ mod tests {
     #[test]
     fn test_set_invalid_root_path() {
         let (client, _temp_dir) = setup_client();
-        let response = client.post("/config/root")
+        let response = client.post("/config/path")
             .json(&serde_json::json!({
                 "path": "/non/existent/path"
             }))
@@ -103,13 +103,14 @@ mod tests {
         assert!(response_json["message"].as_str().unwrap().contains("Invalid path"));
     }
 
+
     #[test]
     fn test_get_file() {
         let (client, temp_dir) = setup_client();
         
         // First set the root path
         let test_path = temp_dir.path().to_string_lossy().to_string();
-        client.post("/config/root")
+        client.post("/config/path")
             .header(ContentType::JSON)
             .json(&serde_json::json!({
                 "path": test_path
@@ -133,7 +134,7 @@ mod tests {
         
         // First set the root path
         let test_path = temp_dir.path().to_string_lossy().to_string();
-        client.post("/config/root")
+        client.post("/config/path")
             .header(ContentType::JSON)
             .json(&serde_json::json!({
                 "path": test_path
@@ -151,7 +152,7 @@ mod tests {
         
         // First set the root path
         let test_path = temp_dir.path().to_string_lossy().to_string();
-        client.post("/config/root")
+        client.post("/config/path")
             .header(ContentType::JSON)
             .json(&serde_json::json!({
                 "path": test_path
