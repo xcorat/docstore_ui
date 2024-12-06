@@ -1,1 +1,0 @@
-export { default as component } from "../../../../src/routes/[client_id]/upload/+page.svelte";

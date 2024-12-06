@@ -10,6 +10,8 @@ serde_json = "1.0"
 tokio = { version = "1.36.0", features = ["full"] }
 rocket-multipart-form-data = "0.10.7"
 uuid = { version = "1.7.0", features = ["v4"] }
+rusqlite = { version = "0.30.0", features = ["chrono", "serde_json"] }
+chrono = { version = "0.4", features = ["serde"] }
 
 [dev-dependencies]
 tempfile = "3.10.0"

@@ -41,9 +41,10 @@
             })
 
             const result = await response.json();
+            console.log(result);
             
             if (response.ok) {
-                uploadStatus = result.message;
+                uploadStatus = `Successfully uploaded ${result.files.length} files`;
                 files.accepted = [];
             } else {
                 throw new Error(result.message || 'Upload failed');
