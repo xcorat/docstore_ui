@@ -1,6 +1,5 @@
 use rusqlite::{Connection, Result, params, OptionalExtension};
 use serde_json;
-use chrono::Utc;
 
 use super::models::{Client, TaxReturn};
 

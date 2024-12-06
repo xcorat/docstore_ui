@@ -1,5 +1,7 @@
-pub mod config;
-pub mod files;
+mod config;
+mod files;
+mod clients;
 
 pub use config::*;
 pub use files::*;
+pub use clients::*;
