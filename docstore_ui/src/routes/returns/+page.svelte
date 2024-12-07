@@ -72,7 +72,7 @@
                                     <span class="mr-2">📝</span>
                                     Edit
                                 </Button>
-                                <Button variant="ghost" size="sm">
+                                <Button variant="ghost" size="sm" href="/{taxReturn.client_id}/upload">
                                     <span class="mr-2">📄</span>
                                     Request Files
                                 </Button>
