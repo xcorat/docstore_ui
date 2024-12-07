@@ -1,4 +1,12 @@
-# sv
+# Test doc server
+
+This project has a rust-rocket backend and a svelte frontend. To test, start the backend with `cargo run` and open the frontend in a browser with `npm run dev` (run `pnpm i` first).
+
+The data is stored in a sqlite database, and the files are also stored alongside the database. The default path for the database is `<tmpdir>/docstore_files/docstore.db`, and the default files are stored in `<tmpdir>/docstore_files/<client_id>/filename.pdf`.
+
+
+----
+# Old README
 
 Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
 
