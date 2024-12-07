@@ -11,6 +11,9 @@ importers:
       svelte-file-dropzone:
         specifier: ^2.0.9
         version: 2.0.9(svelte@5.7.1)
+      svelte-radix:
+        specifier: ^2.0.1
+        version: 2.0.1(svelte@5.7.1)
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^3.0.0
@@ -1438,6 +1441,12 @@ packages:
     resolution: {integrity: sha512-+gS9DscyEcy2Q0jhcADPs7uUEnz56YKudKtLGteEGNi4lF7anPTyxDXoDRiNACWzsp3PF5KfYkw0GgrTieZK9Q==}
     peerDependencies:
       svelte: ^3.54.0 || ^4.0.0 || ^5
+
+  svelte-radix@2.0.1:
+    resolution: {integrity: sha512-YrX44Dj+Rp6YZuPSjdmyd6P8QTkb2NXwySUCZYzjwkP6Cl3dZaTBPPeaSOutP3v3ycQ2XwyNOpyn4p0QcN+uYQ==}
+    engines: {node: '>=18.0.0', npm: '>=7.0.0'}
+    peerDependencies:
+      svelte: ^5.0.0
 
   svelte@5.7.1:
     resolution: {integrity: sha512-kUtiiNcN7ssi5X8OQW8IILoI53RUudjn8TD1910i8cg5c5IRZ4IuaDO1vFl+kZcvv1geYBxlFpi/mj09m/CCBg==}
@@ -2879,6 +2888,10 @@ snapshots:
   svelte-file-dropzone@2.0.9(svelte@5.7.1):
     dependencies:
       file-selector: 0.6.0
+      svelte: 5.7.1
+
+  svelte-radix@2.0.1(svelte@5.7.1):
+    dependencies:
       svelte: 5.7.1
 
   svelte@5.7.1:

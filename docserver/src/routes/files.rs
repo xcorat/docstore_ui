@@ -28,7 +28,6 @@ pub async fn index() -> Json<ApiResponse> {
 
 #[get("/files/<path..>")]
 pub async fn get_file(path: PathBuf, state: &State<AppState>) -> Option<NamedFile> {
-    println!("Request path: {:?}", path);
     let root_path = state.get_root_path().unwrap();
     NamedFile::open(root_path.join(path)).await.ok()
 }

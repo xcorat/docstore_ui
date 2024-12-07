@@ -18,6 +18,7 @@ pub fn rocket() -> _ {
             routes::upload_files,
             routes::list_clients,
             routes::get_client,
+            routes::list_client_files,
             routes::list_returns,
             routes::get_return
         ])
